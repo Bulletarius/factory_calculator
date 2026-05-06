@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class App extends JFrame {
-    private JMenu recipesMenu;
+    private final JMenu recipesMenu;
 
     public App(){
         super("Factory Calculator");
