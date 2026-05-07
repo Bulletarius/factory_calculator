@@ -19,7 +19,7 @@ public class RecipeCreator extends JDialog {
 
     public static final ArrayList<String> items = new ArrayList<>();
 
-    public RecipeCreator(JFrame main){
+    public RecipeCreator(App main){
         super(main,"Recipe Creator", true);
         super.setSize(1000,800);
         super.setLocationRelativeTo(main);
@@ -32,19 +32,24 @@ public class RecipeCreator extends JDialog {
         tempConstraints.insets = new Insets(5,5,5,5);
         tempConstraints.anchor = GridBagConstraints.NORTHWEST;
 
+        JPanel scrollPane = new JPanel();
+        scrollPane.setLayout(new BoxLayout(scrollPane, BoxLayout.Y_AXIS));
+        JScrollPane scrollView = new JScrollPane(scrollPane);
+        super.add(scrollView);
+
         top = new JPanel();
         Customizer.greyBackground(top);
         JLabel topLabel = new JLabel("In items per second");
         topLabel.setForeground(Color.white);
         top.add(topLabel,tempConstraints);
-        super.add(top);
+        scrollPane.add(top);
 
         middle = new JPanel();
         Customizer.greyBackground(middle);
         JLabel bottomLabel = new JLabel("In item count and time taken");
         bottomLabel.setForeground(Color.white);
         middle.add(bottomLabel, tempConstraints);
-        super.add(middle);
+        scrollPane.add(middle);
 
         JPanel bottom = new JPanel();
         Customizer.greyBackground(bottom);
@@ -126,13 +131,37 @@ public class RecipeCreator extends JDialog {
             }
         });
 
+        JButton removeIngredient = new JButton("Remove Ingredient");
+        removeIngredient.addActionListener(e -> {
+            top.remove(ingredientComboBoxesPS.remove(ingredientComboBoxesPS.size()-1));
+            top.remove(ingredientSpinnersPS.remove(ingredientSpinnersPS.size()-1));
+            middle.remove(ingredientComboBoxesTime.remove(ingredientComboBoxesTime.size()-1));
+            middle.remove(ingredientSpinnersTime.remove(ingredientSpinnersTime.size()-1));
+            scrollPane.validate();
+        });
+        bottom.add(removeIngredient);
+
+        JButton removeProduct = new JButton("Remove Product");
+        removeProduct.addActionListener(e -> {
+            top.remove(productComboBoxesPS.remove(productComboBoxesPS.size()-1));
+            top.remove(productSpinnersPS.remove(productSpinnersPS.size()-1));
+            middle.remove(productComboBoxesTime.remove(productComboBoxesTime.size()-1));
+            middle.remove(productSpinnersTime.remove(productSpinnersTime.size()-1));
+            scrollPane.validate();
+        });
+        bottom.add(removeProduct);
+
+        JTextField name = new JTextField(15);
+        name.setToolTipText("Name of the recipe/Building");
+        bottom.add(name);
+
         JButton delete = new JButton("Delete");
         delete.addActionListener(e -> super.dispose());
         bottom.add(delete);
 
         JButton save = new JButton("Save");
         save.addActionListener(e -> {
-            //TODO finish saving recipes
+            main.addRecipe(new Recipe(ingredientComboBoxesPS, productComboBoxesPS, ingredientSpinnersPS, productSpinnersPS, name.getText()));
             super.dispose();
         });
         bottom.add(save);
@@ -170,6 +199,7 @@ public class RecipeCreator extends JDialog {
     }
 
     public void addItem(String in){
+        if(in.isEmpty()) return;
         String item = in.trim();
         items.add(item);
         for (JComboBox<String> box : ingredientComboBoxesPS){
@@ -215,6 +245,6 @@ public class RecipeCreator extends JDialog {
         spinner.addChangeListener(e -> spinner1.setValue((Double)spinner.getValue() * (Double)timeTaken.getValue()));
         spinner1.addChangeListener(e -> spinner.setValue((Double)spinner1.getValue() / (Double)timeTaken.getValue()));
 
-        top.validate();
+        super.validate();
     }
 }

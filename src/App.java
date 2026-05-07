@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class App extends JFrame {
     private final JMenu recipesMenu;
+    private final ArrayList<Recipe> recipes = new ArrayList<>();
 
     public App(){
         super("Factory Calculator");
@@ -19,8 +21,14 @@ public class App extends JFrame {
         JMenuItem addRecept = new JMenuItem("Add Recept");
         recipesMenu.add(addRecept);
         addRecept.addActionListener(e -> new RecipeCreator(this));
-
+        recipesMenu.addSeparator();
 
         super.setVisible(true);
+    }
+
+    public void addRecipe(Recipe recipe){
+        recipes.add(recipe);
+        JMenuItem menuItem = new JMenuItem(recipe.getName());
+        recipesMenu.add(menuItem);
     }
 }
