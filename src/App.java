@@ -27,7 +27,7 @@ public class App extends JFrame {
 
         main = new JPanel(new GridBagLayout());
         JScrollPane scroll = new JScrollPane(main);
-        Customizer.greyBackground(main);
+        main.setBackground(new Color(0x222222));
         super.add(scroll, BorderLayout.CENTER);
 
         IOMenu = new JMenu("Input/Output");
@@ -35,7 +35,21 @@ public class App extends JFrame {
         menus.add(IOMenu);
         JMenuItem addIO = new JMenuItem("Add Input or Output");
         IOMenu.add(addIO);
-        addIO.addActionListener(_ -> new IOCreator(this));
+        addIO.addActionListener(e -> new IOCreator(this));
+
+        JMenu itemMenu = new JMenu("Items");
+        Customizer.blackComponent(itemMenu);
+        menus.add(itemMenu);
+        JMenuItem removeItem = new JMenuItem("Remove an item");
+        removeItem.addActionListener(e -> {
+            if (RecipeCreator.items.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No item to remove exists", "Remove item", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            RecipeCreator.items.remove(JOptionPane.showInputDialog(this, "Choose what item to remove",
+                    "Remove item", JOptionPane.QUESTION_MESSAGE, null, RecipeCreator.items.toArray(), RecipeCreator.items.get(0)));
+        });
+        itemMenu.add(removeItem);
 
         super.setVisible(true);
     }
@@ -43,6 +57,13 @@ public class App extends JFrame {
     public void addRecipe(Recipe recipe){
         recipes.add(recipe);
         JMenuItem menuItem = new JMenuItem(recipe.getName());
+        menuItem.addActionListener(e -> {
+                if (JOptionPane.showConfirmDialog(this,"Are you sure you want to remove " + recipe.getName() + "?"
+                        ,"Remove recipe", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
+                    recipesMenu.remove(menuItem);
+                    recipes.remove(recipe);
+                }
+        });
         recipesMenu.add(menuItem);
     }
 }

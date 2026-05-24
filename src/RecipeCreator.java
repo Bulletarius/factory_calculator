@@ -54,6 +54,7 @@ public class RecipeCreator extends JDialog {
         JPanel bottom = new JPanel();
         Customizer.greyBackground(bottom);
         bottom.setLayout(new FlowLayout(FlowLayout.CENTER,20,20));
+        bottom.setMinimumSize(new Dimension(1000,200));
         super.add(bottom);
 
 
@@ -133,21 +134,25 @@ public class RecipeCreator extends JDialog {
 
         JButton removeIngredient = new JButton("Remove Ingredient");
         removeIngredient.addActionListener(e -> {
-            top.remove(ingredientComboBoxesPS.remove(ingredientComboBoxesPS.size()-1));
-            top.remove(ingredientSpinnersPS.remove(ingredientSpinnersPS.size()-1));
-            middle.remove(ingredientComboBoxesTime.remove(ingredientComboBoxesTime.size()-1));
-            middle.remove(ingredientSpinnersTime.remove(ingredientSpinnersTime.size()-1));
-            scrollPane.validate();
+            int index=ingredientComboBoxesTime.size()-1;
+            if (index<0) return;
+            top.remove(ingredientComboBoxesPS.remove(index));
+            top.remove(ingredientSpinnersPS.remove(index));
+            middle.remove(ingredientComboBoxesTime.remove(index));
+            middle.remove(ingredientSpinnersTime.remove(index));
+            validate();
         });
         bottom.add(removeIngredient);
 
         JButton removeProduct = new JButton("Remove Product");
         removeProduct.addActionListener(e -> {
-            top.remove(productComboBoxesPS.remove(productComboBoxesPS.size()-1));
-            top.remove(productSpinnersPS.remove(productSpinnersPS.size()-1));
-            middle.remove(productComboBoxesTime.remove(productComboBoxesTime.size()-1));
-            middle.remove(productSpinnersTime.remove(productSpinnersTime.size()-1));
-            scrollPane.validate();
+            int index = productSpinnersTime.size() - 1;
+            if(index<0) return;
+            top.remove(productComboBoxesPS.remove(index));
+            top.remove(productSpinnersPS.remove(index));
+            middle.remove(productComboBoxesTime.remove(index));
+            middle.remove(productSpinnersTime.remove(index));
+            validate();
         });
         bottom.add(removeProduct);
 
