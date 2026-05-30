@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class App extends JFrame {
     private final JMenu recipesMenu;
     private final ArrayList<Recipe> recipes = new ArrayList<>();
+    private final ArrayList<InOut> inputsOutputs = new ArrayList<>();
     private final JPanel main;
     private final JMenu IOMenu;
 
@@ -36,6 +37,7 @@ public class App extends JFrame {
         JMenuItem addIO = new JMenuItem("Add Input or Output");
         IOMenu.add(addIO);
         addIO.addActionListener(e -> new IOCreator(this));
+        IOMenu.addSeparator();
 
         JMenu itemMenu = new JMenu("Items");
         Customizer.blackComponent(itemMenu);
@@ -65,5 +67,18 @@ public class App extends JFrame {
                 }
         });
         recipesMenu.add(menuItem);
+    }
+
+    public void addIO(InOut inOut){
+        inputsOutputs.add(inOut);
+        JMenuItem menuItem = new JMenuItem(inOut.getItem());
+        menuItem.addActionListener(e -> {
+            if (JOptionPane.showConfirmDialog(this,"Are you sure you want to remove "+inOut.getItem()+" I/O?",
+                    "Remove I/O", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0){
+                IOMenu.remove(menuItem);
+                inputsOutputs.remove(inOut);
+            }
+        });
+        IOMenu.add(menuItem);
     }
 }
