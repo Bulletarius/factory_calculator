@@ -14,4 +14,10 @@ public class InOut {
     }
 
     public String getItem() {return item;}
+
+    public boolean isOutput() {return output;}
+
+    public double getCountPS() {return countPS;}
+
+    public boolean isGoal() {return goal;}
 }

@@ -67,6 +67,7 @@ public class App extends JFrame {
                 }
         });
         recipesMenu.add(menuItem);
+        calculate();
     }
 
     public void addIO(InOut inOut){
@@ -80,5 +81,21 @@ public class App extends JFrame {
             }
         });
         IOMenu.add(menuItem);
+        calculate();
+    }
+
+    public void calculate(){
+        for (InOut output : inputsOutputs){
+            if (output.isOutput()) {
+                if (output.isGoal()){
+                    for (Recipe recipe : recipes){
+                        if (!recipe.calculated){
+                            recipe.getProducts().forEach((s,d) -> {});
+                        }
+                    }
+                }
+            }
+        }
+        validate();
     }
 }

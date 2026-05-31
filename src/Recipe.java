@@ -6,6 +6,7 @@ public class Recipe {
     private final String name;
     private final LinkedHashMap<String,Double> ingredients = new LinkedHashMap<>();
     private final LinkedHashMap<String,Double> products = new LinkedHashMap<>();
+    public boolean calculated;
 
     public Recipe(ArrayList<JComboBox<String>> ingredients, ArrayList<JComboBox<String>> products,
                   ArrayList<JSpinner> ingredientAmount, ArrayList<JSpinner> productAmount, String name){
@@ -19,4 +20,8 @@ public class Recipe {
     }
 
     public String getName() {return name;}
+
+    public LinkedHashMap<String, Double> getIngredients() {return ingredients;}
+
+    public LinkedHashMap<String, Double> getProducts() {return products;}
 }
