@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class App extends JFrame {
     private final JMenu recipesMenu;
@@ -86,16 +87,36 @@ public class App extends JFrame {
 
     public void calculate(){
         for (InOut output : inputsOutputs){
-            if (output.isOutput()) {
-                if (output.isGoal()){
-                    for (Recipe recipe : recipes){
-                        if (!recipe.calculated){
-                            recipe.getProducts().forEach((s,d) -> {});
-                        }
-                    }
-                }
+            if (output.isOutput() && output.isGoal()) {
+                GridBagConstraints constraints = new GridBagConstraints();
+                constraints.insets = new Insets(20,20,20,20);
+                constraints.weighty = 1;
+                constraints.weightx = 1;
+
+
+                LinkedHashMap<Object,Double> tree = findStep(output.getItem(), new LinkedHashMap<>(), output.getCountPS());
+                //tree.forEach();
             }
         }
         validate();
+    }
+
+    private LinkedHashMap<Object, Double> findStep(String item, LinkedHashMap<Object, Double> tree, double requirement){
+        for (InOut input : inputsOutputs){
+            if (!input.isOutput() && input.getItem().equals(item)){
+                tree.put(input,0d);
+                return tree;
+            }
+        }
+        for (Recipe recipe: recipes){
+            recipe.getProducts().forEach((s,d)-> {
+                if (s.equals(item)){
+                    double multiplier = d / requirement;
+                    tree.put(recipe,multiplier);
+                    recipe.getIngredients().forEach((s1,d1)-> findStep(s1,tree,d1*multiplier));
+                }
+            });
+        }
+        return tree;
     }
 }
