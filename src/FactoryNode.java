@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class FactoryNode extends JPanel {
@@ -15,8 +14,11 @@ public class FactoryNode extends JPanel {
         this.type = type;
         switch (type){
             case 0 : super.setBackground(Color.gray);
-            case 1 : super.setBackground(Color.orange);
-            case 2 : super.setBackground(Color.blue);
+            break;
+            case 1 : super.setBackground(Color.cyan);
+            break;
+            case 2 : super.setBackground(Color.orange);
+            break;
         }
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -24,7 +26,7 @@ public class FactoryNode extends JPanel {
         constraints.weighty = 1;
         constraints.weightx = 1;
         products.forEach((s,d)->{
-            JLabel label = new JLabel(s + ":" + d+ "per second");
+            JLabel label = new JLabel(s + ": " + d + " per second total");
             super.add(label,constraints);
             constraints.gridx++;
         });
@@ -34,7 +36,7 @@ public class FactoryNode extends JPanel {
 
         constraints.gridy = 2;
         ingredients.forEach((s,d)->{
-            JLabel label = new JLabel(s + ": " + d + "per second");
+            JLabel label = new JLabel(s + ": " + d + " per second total");
             super.add(label,constraints);
             constraints.gridx++;
         });
