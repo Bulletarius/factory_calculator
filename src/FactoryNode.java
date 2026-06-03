@@ -8,7 +8,7 @@ public class FactoryNode extends JPanel {
      */
     private final int type;
 
-    public FactoryNode(int type, String name, LinkedHashMap<String,Double> ingredients,LinkedHashMap<String,Double> products ){
+    public FactoryNode(int type, String name, LinkedHashMap<String,Double> ingredients,LinkedHashMap<String,Double> products,double multiplier){
         super(new GridBagLayout());
         if (type > 2) throw new IllegalArgumentException("Type can not be more than two");
         this.type = type;
@@ -26,7 +26,7 @@ public class FactoryNode extends JPanel {
         constraints.weighty = 1;
         constraints.weightx = 1;
         products.forEach((s,d)->{
-            JLabel label = new JLabel(s + ": " + d + " per second total");
+            JLabel label = new JLabel(s + ": " + d*multiplier + " per second total, " + d + " each");
             super.add(label,constraints);
             constraints.gridx++;
         });
@@ -36,7 +36,7 @@ public class FactoryNode extends JPanel {
 
         constraints.gridy = 2;
         ingredients.forEach((s,d)->{
-            JLabel label = new JLabel(s + ": " + d + " per second total");
+            JLabel label = new JLabel(s + ": " + d*multiplier + " per second total, " + d + " each");
             super.add(label,constraints);
             constraints.gridx++;
         });

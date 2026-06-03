@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class App extends JFrame {
+public class App extends JFrame implements Runnable{
     private final JMenu recipesMenu;
     private final ArrayList<Recipe> recipes = new ArrayList<>();
     private final ArrayList<InOut> inputsOutputs = new ArrayList<>();
@@ -65,11 +65,13 @@ public class App extends JFrame {
                         ,"Remove recipe", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
                     recipesMenu.remove(menuItem);
                     recipes.remove(recipe);
-                    calculate();
+                    main.removeAll();
+                    SwingUtilities.invokeLater(this);
                 }
         });
         recipesMenu.add(menuItem);
-        calculate();
+        main.removeAll();
+        SwingUtilities.invokeLater(this);
     }
 
     public void addIO(InOut inOut){
@@ -80,15 +82,16 @@ public class App extends JFrame {
                     "Remove I/O", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == 0){
                 IOMenu.remove(menuItem);
                 inputsOutputs.remove(inOut);
-                calculate();
+                main.removeAll();
+                SwingUtilities.invokeLater(this);
             }
         });
         IOMenu.add(menuItem);
-        calculate();
+        main.removeAll();
+        SwingUtilities.invokeLater(this);
     }
 
-    public void calculate(){
-        //main.removeAll();
+    public void run(){
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(20,20,20,20);
         constraints.weighty = 1;
@@ -99,31 +102,33 @@ public class App extends JFrame {
             if (output.isOutput() && output.isGoal()) {
                 LinkedHashMap<String, Double> outputItem = new LinkedHashMap<>();
                 outputItem.put(output.getItem(), output.getCountPS());
-                main.add(new FactoryNode(2,output.getItem(),outputItem,new LinkedHashMap<>(0)),constraints);
+                main.add(new FactoryNode(2,output.getItem(),outputItem,new LinkedHashMap<>(0),1),constraints);
                 constraints.gridy++;
 
                 LinkedHashMap<Object,Double> tree = findStep(output.getItem(), new LinkedHashMap<>(), output.getCountPS());
                 tree.forEach((o,d)-> {
                     if (o instanceof Recipe r){
-                        r.getProducts().forEach((name, single)-> r.getProducts().replace(name, single*d));
-                        r.getIngredients().forEach((name, single)-> r.getIngredients().replace(name, single*d));
-                        main.add(new FactoryNode(0,r.getName()+" x "+d,r.getIngredients(),r.getProducts()),constraints);
+                        main.add(new FactoryNode(0,r.getName()+" x "+d,r.getIngredients(),r.getProducts(),d),constraints);
                         constraints.gridy++;
                     }else if (o instanceof InOut i){
                         LinkedHashMap<String,Double> inputItem = new LinkedHashMap<>();
                         inputItem.put(i.getItem(),d);
-                        main.add(new FactoryNode(1, i.getItem(), new LinkedHashMap<>(0),inputItem),constraints);
+                        main.add(new FactoryNode(1, i.getItem(), new LinkedHashMap<>(0),inputItem,1),constraints);
                         constraints.gridx++;
                     }
                 });
             }
         }
-        validate();
+        main.validate();
     }
 
     private LinkedHashMap<Object, Double> findStep(String item, LinkedHashMap<Object, Double> tree, double requirement){
         for (InOut input : inputsOutputs){
             if (!input.isOutput() && input.getItem().equals(item)){
+                if (tree.containsKey(input)){
+                    tree.replace(input,requirement + tree.get(input));
+                    return tree;
+                }
                 tree.put(input,requirement);
                 return tree;
             }
