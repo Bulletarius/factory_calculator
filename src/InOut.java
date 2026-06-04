@@ -1,5 +1,9 @@
 import javax.swing.*;
 
+/**
+ * Just a basic class to represent an input or an output
+ * @author Patrik Novotný
+ */
 public class InOut {
     private final boolean output;
     private final String item;

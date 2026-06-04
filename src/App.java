@@ -3,6 +3,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * The main window of the application
+ * @author Patrik Novotný
+ */
 public class App extends JFrame implements Runnable{
     private final JMenu recipesMenu;
     private final ArrayList<Recipe> recipes = new ArrayList<>();
@@ -10,6 +14,9 @@ public class App extends JFrame implements Runnable{
     private final JPanel main;
     private final JMenu IOMenu;
 
+    /**
+     * Constructs a new app without any recipes
+     */
     public App(){
         super("Factory Calculator");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -57,6 +64,10 @@ public class App extends JFrame implements Runnable{
         super.setVisible(true);
     }
 
+    /**
+     * Adds a recipe to an array list for calculation and to the menu for removal at the end calls <code>run</code>
+     * @param recipe the recipe to be saved
+     */
     public void addRecipe(Recipe recipe){
         recipes.add(recipe);
         JMenuItem menuItem = new JMenuItem(recipe.getName());
@@ -74,6 +85,10 @@ public class App extends JFrame implements Runnable{
         SwingUtilities.invokeLater(this);
     }
 
+    /**
+     * Adds an input or output to an array list for calculation and to the menu for removal at the end calls <code>run</code>
+     * @param inOut the input or output to save
+     */
     public void addIO(InOut inOut){
         inputsOutputs.add(inOut);
         JMenuItem menuItem = new JMenuItem(inOut.getItem());
@@ -91,6 +106,10 @@ public class App extends JFrame implements Runnable{
         SwingUtilities.invokeLater(this);
     }
 
+    /**
+     * Calculates and displays the factory graph from the previously added recipes and IO.
+     * Should be called using <code>SwingUtilities.invokeLater()</code>
+     */
     public void run(){
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(20,20,20,20);
@@ -119,6 +138,7 @@ public class App extends JFrame implements Runnable{
                 });
             }
         }
+        for (Recipe recipe : recipes) recipe.calculated = false;
         main.validate();
     }
 
@@ -135,8 +155,9 @@ public class App extends JFrame implements Runnable{
         }
         for (Recipe recipe: recipes){
             recipe.getProducts().forEach((s,d)-> {
-                if (s.equals(item)){
+                if (s.equals(item) && !recipe.calculated){
                     double multiplier = requirement / d;
+                    recipe.calculated = true;
                     tree.put(recipe,multiplier);
                     recipe.getIngredients().forEach((s1,d1)-> findStep(s1,tree,d1*multiplier));
                 }

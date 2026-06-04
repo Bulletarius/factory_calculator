@@ -2,12 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedHashMap;
 
+/**
+ * An <code>JPanel</code> that is constructed based on the parameters of the constructor and is ready to use
+ * @author Patrik Novotný
+ */
 public class FactoryNode extends JPanel {
-    /**
-     * 0 for recipe, 1 for input, 2 for output.
-     */
     private final int type;
 
+    /**
+     * Constructs a new JPanel ready to use
+     * @param type 0 for recipe, 1 for input, 2 for output
+     * @param name name of the node
+     * @param ingredients map of the ingredients
+     * @param products map of the products
+     * @param multiplier amount of buildings with this recipe
+     * @throws IllegalArgumentException if type is more than 2
+     */
     public FactoryNode(int type, String name, LinkedHashMap<String,Double> ingredients,LinkedHashMap<String,Double> products,double multiplier){
         super(new GridBagLayout());
         if (type > 2) throw new IllegalArgumentException("Type can not be more than two");

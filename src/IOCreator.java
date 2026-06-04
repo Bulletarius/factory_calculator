@@ -2,16 +2,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
+/**
+ * A dialog window for the user to create a new input or output
+ * @author Patrik Novotný
+ */
 public class IOCreator extends JDialog {
     private boolean output;
     private boolean goal;
 
+    /**
+     * Constructs a new IOCreator and displays it to the user
+     * @param main owner of the dialog
+     */
     public IOCreator(App main){
         super(main,"Create output or input",true);
         super.setSize(800, 600);
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.setLocationRelativeTo(main);
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel();
         Customizer.greyBackground(panel);
         super.add(panel, BorderLayout.CENTER);
 

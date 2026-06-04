@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A dialog window for the user to create a new recipe
+ * @author Patrik Novotný
+ */
 public class RecipeCreator extends JDialog {
     private final JPanel top;
     private final JPanel middle;
@@ -17,8 +21,15 @@ public class RecipeCreator extends JDialog {
     private final ArrayList<JSpinner> productSpinnersTime = new ArrayList<>();
     private final ArrayList<JComboBox<String>> productComboBoxesTime = new ArrayList<>();
 
+    /**
+     * Stores all the items in the app created by the user
+     */
     public static final ArrayList<String> items = new ArrayList<>();
 
+    /**
+     * Constructs and displays a new Recipe Creator
+     * @param main owner of the dialog
+     */
     public RecipeCreator(App main){
         super(main,"Recipe Creator", true);
         super.setSize(1000,800);
@@ -203,6 +214,10 @@ public class RecipeCreator extends JDialog {
         super.validate();
     }
 
+    /**
+     * Adds a new item to the system
+     * @param in the item to be added
+     */
     public void addItem(String in){
         if(in.isEmpty()) return;
         String item = in.trim();
@@ -221,7 +236,7 @@ public class RecipeCreator extends JDialog {
         }
     }
 
-    public void addProduct(){
+    private void addProduct(){
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridy = productSpinnersPS.size() + 2;
         constraints.gridx = 2;
