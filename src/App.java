@@ -139,7 +139,8 @@ public class App extends JFrame implements Runnable{
             }
         }
         for (Recipe recipe : recipes) recipe.calculated = false;
-        main.validate();
+        super.validate();
+        super.repaint();
     }
 
     private LinkedHashMap<Object, Double> findStep(String item, LinkedHashMap<Object, Double> tree, double requirement){
